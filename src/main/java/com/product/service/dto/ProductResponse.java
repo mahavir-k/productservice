@@ -8,6 +8,7 @@ public class ProductResponse {
     private String brandName;
     private String productType;
     private int productQuantity;
+    private String status;
 
     public int getProductId() {
         return productId;
@@ -63,5 +64,13 @@ public class ProductResponse {
 
     public void setProductQuantity(int productQuantity) {
         this.productQuantity = productQuantity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
