@@ -4,6 +4,7 @@ import com.product.service.dto.ProductRequest;
 import com.product.service.dto.ProductResponse;
 import com.product.service.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+
+    @Value("${server.port}")
+    private int portNumber;
 
     @Autowired
     private ProductService service;
@@ -22,6 +26,7 @@ public class ProductController {
 
     @GetMapping("/all")
     public List<ProductResponse> findProduct() {
+        System.out.println("Port number: " + portNumber);
         return service.findProduct();
     }
 
@@ -30,5 +35,9 @@ public class ProductController {
         return service.readProduct(productId);
     }
 
+    @GetMapping("/detail/byName/{productName}")
+    public ProductResponse getProductByName(@PathVariable("productName") String productName) {
+        return service.findByProductName(productName);
+    }
 
 }

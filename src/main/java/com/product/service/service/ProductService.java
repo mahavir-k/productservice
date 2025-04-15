@@ -4,6 +4,7 @@ import com.product.service.Repository.ProductRepository;
 import com.product.service.dto.ProductRequest;
 import com.product.service.dto.ProductResponse;
 import com.product.service.entity.ProductEntity;
+import com.product.service.util.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +35,14 @@ public class ProductService {
         } else {
             ProductEntity entity = repository.save(productEntity);
 
-            response.setProductId(productEntity.getProductId());
+           /* response.setProductId(productEntity.getProductId());
             response.setProductType(productEntity.getProductType());
             response.setProductName(productEntity.getProductName());
             response.setBrandName(productEntity.getProductName());
             response.setMfgDate(productEntity.getMfgDate());
             response.setProductPrice(productEntity.getProductPrice());
-            response.setProductQuantity(productEntity.getProductQuantity());
+            response.setProductQuantity(productEntity.getProductQuantity());*/
+            ProductUtils.entityToResponseConverter(entity);
             response.setStatus("Product added successfully.....!");
         }
         return response;
@@ -53,14 +55,16 @@ public class ProductService {
 
         // For each loop
         for (ProductEntity entity : entities) {
-            ProductResponse newObj = new ProductResponse();
+            ProductResponse newObj = ProductUtils.entityToResponseConverter(entity);
+
+           /* ProductResponse newObj = new ProductResponse();
             newObj.setProductId(entity.getProductId());
             newObj.setProductPrice(entity.getProductPrice());
             newObj.setProductName(entity.getProductName());
             newObj.setProductType(entity.getProductType());
             newObj.setProductQuantity(entity.getProductQuantity());
             newObj.setMfgDate(entity.getMfgDate());
-            newObj.setBrandName(entity.getBrandName());
+            newObj.setBrandName(entity.getBrandName());*/
 
             list.add(newObj);
         }
@@ -73,6 +77,18 @@ public class ProductService {
         return list;
     }
 
+    /*private static ProductResponse entityToResponseConverter(ProductEntity entity) {
+        ProductResponse newObj = new ProductResponse();
+        newObj.setProductId(entity.getProductId());
+        newObj.setProductPrice(entity.getProductPrice());
+        newObj.setProductName(entity.getProductName());
+        newObj.setProductType(entity.getProductType());
+        newObj.setProductQuantity(entity.getProductQuantity());
+        newObj.setMfgDate(entity.getMfgDate());
+        newObj.setBrandName(entity.getBrandName());
+        return newObj;
+    }*/
+
     public ProductResponse readProduct(int productId) {
 
         Optional<ProductEntity> productEntity = repository.findById(productId);
@@ -81,15 +97,20 @@ public class ProductService {
         ProductResponse response = new ProductResponse();
         if (productEntity.isPresent()) {
             ProductEntity entity = productEntity.get();
-            response.setProductId(entity.getProductId());
+            response = ProductUtils.entityToResponseConverter(entity);
+            /*response.setProductId(entity.getProductId());
             response.setProductPrice(entity.getProductPrice());
             response.setProductType(entity.getProductType());
             response.setProductName(entity.getProductName());
             response.setMfgDate(entity.getMfgDate());
             response.setProductQuantity(entity.getProductQuantity());
-            response.setBrandName(entity.getBrandName());
+            response.setBrandName(entity.getBrandName());*/
         }
         return response;
     }
 
+    public ProductResponse findByProductName(String productName) {
+        ProductEntity entity = repository.findByProductName(productName);
+        return ProductUtils.entityToResponseConverter(entity);
+    }
 }
